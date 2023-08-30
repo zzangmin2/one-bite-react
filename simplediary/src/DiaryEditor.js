@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { DiaryDispatchContext } from "./App";
 
-const DiaryEditor = ({ onCreate }) => {
+const DiaryEditor = () => {
   // const [author, setAuthor] = useState("안녕");
   // const [content, setContent] = useState("");
 
   // 위 state를 하나로 합치기
+
+  const { onCreate } = useContext(DiaryDispatchContext);
 
   useEffect(() => {
     console.log("DiaryEditor 렌더");
