@@ -1,4 +1,4 @@
-# 7-1. PAGE ROUTING
+# 6-1. PAGE ROUTING
 
 - ROUTING이란?
 
@@ -14,7 +14,7 @@
   - _react는 SPA + CSR 방식_
     - react app이 서버에 요청을 보내지 않고 알아서 페이지를 업데이트 하여 페이지를 이동함. 즉, 서버 대기시간이 없어지고 빠른 시간에 페이지를 이동할 수 있음
 
-# 7-2. 페이지 라우팅1
+# 6-2. 페이지 라우팅1
 
 - React Router
 
@@ -76,4 +76,92 @@
   export default RouteTest;
   ```
 
-# 7-3 페이지 라우팅 2
+# 6-3 페이지 라우팅 2
+
+- React Router Dom의 유용한 기능
+
+  - REACT ROUTER V6
+    - react에서 csr기반의 페이지 라우팅을 할 수 있게 해주는 라이브러리
+    1. Path Variable -> useParams
+    2. Query String -> useSearchParams
+    3. Page Moving -> useNavigate
+
+- path variable
+
+  - useParams 사용
+
+  ```js
+  //App.js
+  <Route path="/diary/:id" element={<Diary />} />
+
+  //Diary.js
+  import { useParams } from "react-router-dom";
+
+  const Diary = () => {
+    const { id } = useParams();
+    ...
+
+  }
+  ```
+
+- Query String
+
+  - 웹 페이지에 데이터를 전달하는 가장 간단한 방법
+  - `/edit?id=10&mode=dark`
+
+  ```js
+  import { useSearchParams } from "react-router-dom";
+
+  const Edit = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const id = searchParams.get("id");
+    console.log("id: ", id);
+
+    const mode = searchParams.get("mode");
+    console.log("mode: ", mode);
+
+    return (
+      <div>
+        <button onClick={() => setSearchParams({ who: "jungmin" })}>
+          QS 바꾸기
+        </button>
+      </div>
+    );
+  };
+  ```
+
+- Page Moving
+
+  - useNavigate 사용
+  - 굳이 링크를 클릭 안 해도 페이지를 바꿀 수 있게 해 줌
+
+  ```js
+  import { useNavigate, useSearchParams } from "react-router-dom";
+
+  const Edit = () => {
+    const navigate = useNavigate();
+
+    return (
+      <button
+        onClick={() => {
+          navigate("/home");
+        }}
+      >
+        Home으로 가기
+      </button>
+      <button
+        onClick={() => {
+          navigate(-1);
+        }}
+      ></button>
+    );
+  };
+  ```
+
+# 6-4 프로젝트 기초공사
+
+1. 폰트 세팅 - google web fonts를 이용한 프로젝트에 사용되는 폰트 세팅
+2. 레이아웃 세팅 - 모든 페이지에 반영되는 레이아웃 세팅
+3. 이미지 에셋 세팅 - 감정 이미지들을 프로젝트에서 불러와 사용할 수 있는 환경 세팅
+4. 공통 컴포넌트 세팅 - 모든 페이지에 공통으로 사용되는 버튼, 헤더 컴포넌트 세팅
