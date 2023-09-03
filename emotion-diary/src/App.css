@@ -7,7 +7,7 @@ body {
   align-items: center;
   font-family: "Nanum Pen Script";
   min-height: 100vh; /* viewport height -> 지금 화면에서 100%를 최소 높이로 갖겠다 */
-  /* margin: 0px */
+  margin: 0px;
 }
 
 @media (min-width: 650px) {
