@@ -279,3 +279,51 @@ function App() {
 ```
 
 # 7-6 HOME 구현하기
+
+```js
+// 현재 날짜를 불러오고, 현재 달에 존재하는 data만 필터링하여 보여 줌
+// 헤더의 버튼을 클릭하면 이전 달, 다음 달 데이터로 이동하는 효과 발생
+// DiaryList 컴포넌트를 생성하여 Home에 데이터를 매핑
+
+const [data, setData] = useState([]);
+const [curDate, setCurDate] = useState(new Date());
+console.log(curDate);
+
+const headText = `${curDate.getFullYear()}년 ${curDate.getMonth() + 1}월`;
+
+useEffect(() => {
+  if (diaryList.length >= 1) {
+    const firstDay = new Date(
+      curDate.getFullYear(),
+      curDate.getMonth(),
+      1
+    ).getTime();
+
+    const lastDay = new Date(
+      curDate.getFullYear(),
+      curDate.getMonth() + 1,
+      0
+    ).getTime();
+
+    setData(
+      diaryList.filter((it) => firstDay <= it.date && it.date <= lastDay)
+    );
+  }
+}, [diaryList, curDate]);
+
+useEffect(() => {
+  console.log(data);
+}, [data]);
+
+const increaseMonth = () => {
+  setCurDate(
+    new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate())
+  );
+};
+
+const decreaseMonth = () => {
+  setCurDate(
+    new Date(curDate.getFullYear(), curDate.getMonth() - 1, curDate.getDate())
+  );
+};
+```
