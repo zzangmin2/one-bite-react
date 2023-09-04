@@ -1,4 +1,4 @@
-# 6-1. PAGE ROUTING
+# 7-1. PAGE ROUTING
 
 - ROUTING이란?
 
@@ -14,7 +14,7 @@
   - _react는 SPA + CSR 방식_
     - react app이 서버에 요청을 보내지 않고 알아서 페이지를 업데이트 하여 페이지를 이동함. 즉, 서버 대기시간이 없어지고 빠른 시간에 페이지를 이동할 수 있음
 
-# 6-2. 페이지 라우팅1
+# 7-2. 페이지 라우팅1
 
 - React Router
 
@@ -76,7 +76,7 @@
   export default RouteTest;
   ```
 
-# 6-3 페이지 라우팅 2
+# 7-3 페이지 라우팅 2
 
 - React Router Dom의 유용한 기능
 
@@ -159,7 +159,7 @@
   };
   ```
 
-# 6-4 프로젝트 기초공사
+# 7-4 프로젝트 기초공사
 
 1. 폰트 세팅 - google web fonts를 이용한 프로젝트에 사용되는 폰트 세팅
 2. 레이아웃 세팅 - 모든 페이지에 반영되는 레이아웃 세팅
@@ -188,8 +188,94 @@
 const btnType = ["positive", "negative"].includes(type) ? type : "default";
 ```
 
-# 6-5 프로젝트 기초공사 2
+# 7-5 프로젝트 기초공사 2
 
 1. 상태 관리 세팅하기 - 프로젝트 전반적으로 사용될 일기 데이터 State 관리 로직 작성하기
 2. 프로젝트 State Context 세팅하기 - 일기 데이터 State를 공급할 Context를 생성하고 Provider로 공급하기
 3. 프로젝트 Dispatch Context 세팅하기 - 일기 데이터 State의 Dispatch 함수들을 공급할 Context를 생성하고 Provider로 공급하기
+
+```js
+
+// useReducer로 상태 관리
+// DiaryStateContext로 일기 데이터의 상태를 공급
+// DiaryDisapatchContext로 일기 데이터의 상태의 dispatch함수를 공급
+
+const reducer = (state, action) => {
+  let newState = [];
+  switch (action.type) {
+    case "INIT": {
+      return action.data;
+    }
+    case "CREATE": {
+      const newItem = {
+        ...action.data,
+      };
+      newState = [newItem, ...state];
+      break; //switch문은 default까지 자동 실행. 즉 default실행 원하지 않으면 break작성.
+    }
+    case "REMOVE": {
+      newState = state.filter((it) => it.id !== action.targetId);
+      break;
+    }
+    case "EDIT": {
+      newState = state.map((it) =>
+        it.id === action.data.id ? { ...action.data } : it
+      );
+      break;
+    }
+    default:
+      return state;
+  }
+  return newState;
+};
+
+export const DiaryStateContext = React.createContext();
+export const DiaryDispatchContext = React.createContext(); //Dispatch함수 공급
+
+function App() {
+  //useReducer의 기본 형태
+  //const [state, dispatch] = useReducer(reducer, initialState);
+  // -> state는 앞으로 컴포넌트에서 사용할 수 있는 상태, dispatch는 액션을 발생시키는 함수
+  const [data, dispatch] = useReducer(reducer, []);
+
+  const dataId = useRef(0); //data의 id
+  //CREATE
+  const onCreate = (date, content, emotion) => {
+    dispatch({
+      type: "CREATE",
+      data: {
+        id: dataId.current,
+        date: new Date(date).getTime(),
+        content,
+        emotion,
+      },
+    });
+    dataId.current += 1;
+  };
+  //REMOVE
+  const onRemove = (targetId) => {
+    dispatch({ type: "REMOVE", targetId });
+  };
+  //EDIT
+  const onEdit = (targetId, date, content, emotion) => {
+    dispatch({
+      type: "EDIT",
+      data: {
+        id: targetId,
+        date: new Date(date).getTime(),
+        content,
+        emotion,
+      },
+    });
+  };
+
+  return (
+    <DiaryStateContext.Provider value={data}>
+      <DiaryDispatchContext.Provider value={(onCreate, onEdit, onRemove)}>
+          ....
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
+  );
+```
+
+# 7-6 HOME 구현하기
