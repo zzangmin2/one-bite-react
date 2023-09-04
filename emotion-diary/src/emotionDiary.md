@@ -166,8 +166,30 @@
 3. 이미지 에셋 세팅 - 감정 이미지들을 프로젝트에서 불러와 사용할 수 있는 환경 세팅
 4. 공통 컴포넌트 세팅 - 모든 페이지에 공통으로 사용되는 버튼, 헤더 컴포넌트 세팅
 
-```html
-<!-- process.env.PUBLIC_URL -> 어느 위치에 있던 public 디렉토리를 지정함 -->
+```js
+//App.js
+// process.env.PUBLIC_URL -> 어느 위치에 있던 public 디렉토리를 지정함
 <img src={process.env.PUBLIC_URL + `/assets/emotion1.png`} />
-
 ```
+
+```js
+//MyButton.js
+
+// 클래스 이름을 타입에 따라 동적으로 바꾸기.
+// ex) MyButton MyButton_positive
+<button
+  className={["MyButton", `MyButton_${type}`].join(" ")}
+  onClick={onClick}
+>
+  {text}
+</button>;
+
+// 이상한 타입을 Props로 받아도 default로 유지하기
+const btnType = ["positive", "negative"].includes(type) ? type : "default";
+```
+
+# 6-5 프로젝트 기초공사 2
+
+1. 상태 관리 세팅하기 - 프로젝트 전반적으로 사용될 일기 데이터 State 관리 로직 작성하기
+2. 프로젝트 State Context 세팅하기 - 일기 데이터 State를 공급할 Context를 생성하고 Provider로 공급하기
+3. 프로젝트 Dispatch Context 세팅하기 - 일기 데이터 State의 Dispatch 함수들을 공급할 Context를 생성하고 Provider로 공급하기
