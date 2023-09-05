@@ -5,6 +5,12 @@ const sortOptionList = [
   { value: "oldest", name: "오래된순" },
 ];
 
+const filterOptionList = [
+  { value: "all", name: "전부 다" },
+  { value: "good", name: "좋은 감정만" },
+  { value: "bad", name: "안 좋은 감정만" },
+];
+
 const ControlMenu = ({ value, onChange, optionList }) => {
   return (
     <select value={value} onChange={(e) => onChange(e.target.value)}>
@@ -19,6 +25,7 @@ const ControlMenu = ({ value, onChange, optionList }) => {
 
 const DiaryList = ({ diaryList }) => {
   const [sortType, setSortType] = useState("latest");
+  const [filter, setfilter] = useState("all");
 
   const getProcessedDiaryList = () => {
     const compare = (a, b) => {
@@ -30,6 +37,8 @@ const DiaryList = ({ diaryList }) => {
     };
     // 원본 데이터가 변경되지 않게 깊은 복사하기
     const copyList = JSON.parse(JSON.stringify(diaryList));
+    //감정 비교를 위해 복사된 걸 필터링
+    // const filteredList = filter == 'all' ? copyList.filter();
     const sortedList = copyList.sort(compare);
     return sortedList;
   };
@@ -41,8 +50,16 @@ const DiaryList = ({ diaryList }) => {
         onChange={setSortType}
         optionList={sortOptionList}
       />
+      <ControlMenu
+        value={filter}
+        onChange={setfilter}
+        optionList={filterOptionList}
+      />
       {getProcessedDiaryList().map((it) => (
-        <div key={it.id}>{it.content}</div>
+        <div key={it.id}>
+          {it.content}
+          {it.emotion}
+        </div>
       ))}
     </div>
   );
