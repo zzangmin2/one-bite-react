@@ -44,7 +44,8 @@ const dummyData = [
   {
     id: 1,
     emotion: 1,
-    content: "오늘의 일기 1번",
+    content:
+      "오늘의 일기 1번alksdjfajdsf;lj;ewiowjfleaswgnv;lskrjeg;aiejswfilajwefiawse;fojasdrgmnanrewfoiajefjo;asjdf;aslmd;flkaio;rfj;oisjFalkjsdf;oaj;sldkfakjsdflk;ajsdf;o",
     date: 1693808051249,
   },
   {

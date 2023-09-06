@@ -281,6 +281,7 @@ function App() {
 # 7-6 HOME 구현하기
 
 ```js
+// Home.js
 // 현재 날짜를 불러오고, 현재 달에 존재하는 data만 필터링하여 보여 줌
 // 헤더의 버튼을 클릭하면 이전 달, 다음 달 데이터로 이동하는 효과 발생
 // DiaryList 컴포넌트를 생성하여 Home에 데이터를 매핑
@@ -327,3 +328,150 @@ const decreaseMonth = () => {
   );
 };
 ```
+
+```js
+// DiaryList.js
+// 컨트롤 메뉴를 만들고 이에 맞추어 데이터를 필터링하여 보여줌
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import MyButton from "./MyButton";
+
+const sortOptionList = [
+  { value: "latest", name: "최신순" },
+  { value: "oldest", name: "오래된순" },
+];
+
+const filterOptionList = [
+  { value: "all", name: "전부 다" },
+  { value: "good", name: "좋은 감정만" },
+  { value: "bad", name: "안 좋은 감정만" },
+];
+
+// 컨트롤 메뉴 기본 프레임
+const ControlMenu = ({ value, onChange, optionList }) => {
+  return (
+    <select value={value} onChange={(e) => onChange(e.target.value)}>
+      {optionList.map((it, idx) => (
+        <option key={idx} value={it.value}>
+          {it.name}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+const DiaryList = ({ diaryList }) => {
+  const navigate = useNavigate();
+  const [sortType, setSortType] = useState("latest");
+  const [filter, setfilter] = useState("all");
+
+  // 필터링 기준에 맞추어 리스트를 정렬 해줌
+  const getProcessedDiaryList = () => {
+    const filterCallBack = (item) => {
+      if (filter === "good") {
+        return parseInt(item.emotion) <= 3;
+      } else if (filter === "bad") {
+        return parseInt(item.emotion) > 3;
+      }
+    };
+    const compare = (a, b) => {
+      if (sortType === "latest") {
+        return parseInt(b.date) - parseInt(a.date);
+      } else {
+        return parseInt(a.date) - parseInt(b.date);
+      }
+    };
+    // 원본 데이터가 변경되지 않게 깊은 복사하기
+    const copyList = JSON.parse(JSON.stringify(diaryList));
+    //감정 비교를 위해 복사된 걸 필터링
+    const filteredList =
+      filter === "all" ? copyList : copyList.filter((it) => filterCallBack(it));
+    const sortedList = filteredList.sort(compare);
+    return sortedList;
+  };
+
+  return (
+    <div>
+      <ControlMenu
+        value={sortType}
+        onChange={setSortType}
+        optionList={sortOptionList}
+      />
+      <ControlMenu
+        value={filter}
+        onChange={setfilter}
+        optionList={filterOptionList}
+      />
+      <MyButton
+        type={"positive"}
+        text={"새 일기쓰기"}
+        //useNavigate를 사용하여 페이지 이동 !!!!!
+        onClick={() => navigate("/new")}
+      />
+      {getProcessedDiaryList().map((it) => (
+        <div key={it.id}>
+          {it.content}
+          {it.emotion}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+DiaryList.defaultProps = {
+  diaryList: [],
+};
+
+export default DiaryList;
+```
+
+```js
+// DiaryItem.js
+// DiaryList 내 아이템 컴포넌트
+
+import { useNavigate } from "react-router-dom";
+import MyButton from "./MyButton";
+
+const DiaryItem = ({ id, emotion, content, date }) => {
+  //만약 process.env.PUBLIC_URL 작동 안 될 떄
+  //   const env = process.env;
+  //   env.PUBLIC_URL = env.PUBLIC_URL || "";
+
+  // 날짜를 스트링타입으로 변환
+  const navigate = useNavigate();
+  const strDate = new Date(parseInt(date)).toLocaleDateString();
+
+  const goDetail = () => {
+    navigate(`/diary/${id}`);
+  };
+
+  const goEdit = () => {
+    navigate(`/edit/${id}`);
+  };
+
+  return (
+    <div className="DiaryItem">
+      <div
+        className={[
+          "emotion_img_wrapper",
+          `emotion_img_wrapper_${emotion}`,
+        ].join(" ")}
+      >
+        <img src={process.env.PUBLIC_URL + `assets/emotion${emotion}.png`} />
+      </div>
+      <div onClick={goDetail} className="info_wrapper">
+        <div className="diary_date">{strDate}</div>
+        <div className="diary_content_preview">{content.slice(0, 25)}</div>
+      </div>
+      <div className="btn_wrapper">
+        <MyButton onClick={goEdit} text={"수정하기"} />
+      </div>
+    </div>
+  );
+};
+
+export default DiaryItem;
+```
+
+# 7-7 페이지 구현 - 일기 쓰기 (/new)
