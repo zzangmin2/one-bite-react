@@ -475,3 +475,50 @@ export default DiaryItem;
 ```
 
 # 7-7 페이지 구현 - 일기 쓰기 (/new)
+
+```js
+// DiaryEditor.js
+// new.js의 화면 구성은 Edit.js와 비슷하기 떄문에 새로운 컴포넌트 생성
+// 현재 날짜를 보여주고 날짜 선택 할 수 있는 input창 생성
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import MyButton from "./MyButton";
+import MyHeader from "./MyHeader";
+
+// new Date를 String화 시키는 함수
+const getStringDate = (date) => {
+  //toISOString() -> 형식의 문자열을 반환하는 메서드
+  return date.toISOString().slice(0, 10);
+};
+
+const DiaryEditor = () => {
+  const [date, setDate] = useState(getStringDate(new Date()));
+  const navigate = useNavigate();
+  return (
+    <div className="DiaryEditor">
+      <MyHeader
+        headText={"새 일기쓰기"}
+        leftChild={<MyButton text={"뒤로가기"} onClick={() => navigate(-1)} />}
+      />
+
+      <div>
+        <section>
+          <h4>오늘은 언제인가요?</h4>
+          <div className="input_box">
+            <input
+              className="input_date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              type="date"
+            />
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default DiaryEditor;
+```
