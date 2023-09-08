@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useEffect, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import MyButton from "./MyButton";
@@ -37,10 +37,11 @@ const emotionList = [
 // new Date를 String화 시키는 함수
 const getStringDate = (date) => {
   //toISOString() -> 형식의 문자열을 반환하는 메서드
+
   return date.toISOString().slice(0, 10);
 };
 
-const DiaryEditor = () => {
+const DiaryEditor = (isEdit, originData) => {
   const contentRef = useRef();
   const [content, setContent] = useState("");
   const [emotion, setEmotion] = useState(3);
@@ -52,13 +53,24 @@ const DiaryEditor = () => {
     setEmotion(emotion);
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = () => {
     if (content.length < 1) {
       contentRef.current.focus();
       return;
     }
+
+    onCreate(date, content, emotion);
+    navigate("/", { replace: true }); //home으로 이동하되, 다시 edit 페이지로 못 옴
   };
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isEdit) {
+      setDate(getStringDate(new Date(parseInt(originData.date))));
+    }
+  }, [isEdit, originData]);
+
   return (
     <div className="DiaryEditor">
       <MyHeader
@@ -105,7 +117,7 @@ const DiaryEditor = () => {
         <section>
           <div className="control_box">
             <MyButton text="취소하기" onClick={() => navigate(-1)} />
-            <MyButton text="작성완료" type="positive" onClick={() => {}} />
+            <MyButton text="작성완료" type="positive" onClick={handleSubmit} />
           </div>
         </section>
       </div>

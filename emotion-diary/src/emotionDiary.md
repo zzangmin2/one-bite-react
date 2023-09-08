@@ -522,3 +522,5 @@ const DiaryEditor = () => {
 
 export default DiaryEditor;
 ```
+
+# 7-8 페이지 구현 - 일기 수정 (/edit)

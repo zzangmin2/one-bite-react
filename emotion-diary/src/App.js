@@ -118,7 +118,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/new" element={<New />} />
-              <Route path="/edit" element={<Edit />} />
+              <Route path="/edit/:id" element={<Edit />} /> {/* pathVariable */}
               <Route path="/diary/:id" element={<Diary />} />
             </Routes>
             {/* <a href={"/new"}>New로 이동</a> */}
