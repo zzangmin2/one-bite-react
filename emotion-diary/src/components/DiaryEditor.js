@@ -1,45 +1,13 @@
 import { useEffect, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DiaryDispatchContext } from "../App";
 
 import MyButton from "./MyButton";
 import MyHeader from "./MyHeader";
 import EmotionItem from "./EmotionItem";
-import { DiaryDispatchContext } from "../App";
 
-const emotionList = [
-  {
-    emotion_id: 1,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion1.png`,
-    emotion_descript: "완전 좋음",
-  },
-  {
-    emotion_id: 2,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion2.png`,
-    emotion_descript: "좋음",
-  },
-  {
-    emotion_id: 3,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion3.png`,
-    emotion_descript: "그럭저럭",
-  },
-  {
-    emotion_id: 4,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion4.png`,
-    emotion_descript: "나쁨",
-  },
-  {
-    emotion_id: 5,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion5.png`,
-    emotion_descript: "끔찍함",
-  },
-];
-
-// new Date를 String화 시키는 함수
-const getStringDate = (date) => {
-  //toISOString() -> 형식의 문자열을 반환하는 메서드
-
-  return date.toISOString().slice(0, 10);
-};
+import { getStringDate } from "../util/date";
+import { emotionList } from "../util/emotion";
 
 const DiaryEditor = (isEdit, originData) => {
   const contentRef = useRef();
@@ -47,7 +15,7 @@ const DiaryEditor = (isEdit, originData) => {
   const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
 
-  const { onCreate } = useContext(DiaryDispatchContext);
+  const { onCreate, onEdit } = useContext(DiaryDispatchContext);
 
   const handleClickEmote = (emotion) => {
     setEmotion(emotion);
@@ -61,20 +29,34 @@ const DiaryEditor = (isEdit, originData) => {
       return;
     }
 
+    if (
+      window.confirm(
+        isEdit ? "일기를 수정하시겠습니까? " : "새로운 일기를 작성하시겠습니까?"
+      )
+    ) {
+      if (!isEdit) {
+        onCreate(date, content, emotion);
+      } else {
+        onEdit(originData.id, date, content, emotion);
+      }
+    }
+
     onCreate(date, content, emotion);
     navigate("/", { replace: true }); //home으로 이동하되, 다시 edit 페이지로 못 옴
   };
 
   useEffect(() => {
     if (isEdit) {
-      setDate(getStringDate(new Date(parseInt(originData.date))));
+      setDate(getStringDate(new Date()));
+      setEmotion(originData.emotion);
+      setContent(originData.content);
     }
   }, [isEdit, originData]);
 
   return (
     <div className="DiaryEditor">
       <MyHeader
-        headText={"새 일기쓰기"}
+        headText={isEdit ? "일기 수정하기" : "새 일기쓰기"}
         leftChild={<MyButton text={"뒤로가기"} onClick={() => navigate(-1)} />}
       />
 

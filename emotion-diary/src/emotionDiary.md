@@ -524,3 +524,8 @@ export default DiaryEditor;
 ```
 
 # 7-8 페이지 구현 - 일기 수정 (/edit)
+
+- 기존 일기 데이터를 가져오는 과정에서 오류 발생.
+- 원인 찾는 중 ..
+
+# 7-9. Diary 구현하기 (/DIARY)

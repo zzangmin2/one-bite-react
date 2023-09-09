@@ -77,8 +77,6 @@ const dummyData = [
 function App() {
   const [data, dispatch] = useReducer(reducer, dummyData);
 
-  console.log(new Date().getTime());
-
   const dataId = useRef(0); //data의 id
   //CREATE
   const onCreate = (date, content, emotion) => {
@@ -112,7 +110,7 @@ function App() {
 
   return (
     <DiaryStateContext.Provider value={data}>
-      <DiaryDispatchContext.Provider value={(onCreate, onEdit, onRemove)}>
+      <DiaryDispatchContext.Provider value={{ onCreate, onEdit, onRemove }}>
         <BrowserRouter>
           <div className="App">
             <Routes>
