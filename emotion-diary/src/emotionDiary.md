@@ -529,3 +529,23 @@ export default DiaryEditor;
 - 원인 찾는 중 ..
 
 # 7-9. Diary 구현하기 (/DIARY)
+
+# 흔히 발생하는 버그 수정하기
+
+1.  ` Warning: Encountered two children with the same key, 1 . Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.`
+
+- [이유] : 두 개의 자식이 똑같은 키 값을 가지고 있음
+- [해결 방법] : `const dataId = useRef(6); ` useRef의 초기값을 6으로 바꿈
+
+2. 매 달의 마지막 날에 작성한 게시물이 리스트에서 보여지지 않음 ( 데이터에는 잘 들어감)
+
+- [이유] : 마지막 날을 정하는 함수에서 마지막 날까지만 작성 해 놓고 마지막 날의 시간을 따로 지정하지 않음
+- [해결 방법] :
+  `     const lastDay = new Date(
+  curDate.getFullYear(),
+  curDate.getMonth() + 1,
+  0,
+  23,
+  59,
+  59
+).getTime();` new Date()는 시, 분 , 초까지 지정 가능 함.

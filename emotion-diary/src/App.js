@@ -77,7 +77,7 @@ const dummyData = [
 function App() {
   const [data, dispatch] = useReducer(reducer, dummyData);
 
-  const dataId = useRef(0); //data의 id
+  const dataId = useRef(6); //data의 id
   //CREATE
   const onCreate = (date, content, emotion) => {
     dispatch({
