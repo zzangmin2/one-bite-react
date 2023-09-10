@@ -1,4 +1,4 @@
-import React, { useRef, useReducer } from "react";
+import React, { useEffect, useRef, useReducer } from "react";
 
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -44,8 +44,7 @@ const dummyData = [
   {
     id: 1,
     emotion: 1,
-    content:
-      "오늘의 일기 1번alksdjfajdsf;lj;ewiowjfleaswgnv;lskrjeg;aiejswfilajwefiawse;fojasdrgmnanrewfoiajefjo;asjdf;aslmd;flkaio;rfj;oisjFalkjsdf;oaj;sldkfakjsdflk;ajsdf;o",
+    content: "오늘의 일기 1번alksdjfajdsf;lj;ewiow;o",
     date: 1693808051249,
   },
   {
@@ -75,6 +74,11 @@ const dummyData = [
 ];
 
 function App() {
+  useEffect(() => {
+    localStorage.setItem("item1", 10);
+    localStorage.setItem("item2", "20");
+    localStorage.setItem("item3", JSON.stringify({ value: 30 })); //직렬화
+  }, []);
   const [data, dispatch] = useReducer(reducer, dummyData);
 
   const dataId = useRef(6); //data의 id
