@@ -34,52 +34,22 @@ const reducer = (state, action) => {
     default:
       return state;
   }
+
+  localStorage.setItem("diary", JSON.stringify(newState)); //배열을 직렬화
   return newState;
 };
 
 export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext(); //Dispatch함수 공급
 
-const dummyData = [
-  {
-    id: 1,
-    emotion: 1,
-    content: "오늘의 일기 1번alksdjfajdsf;lj;ewiow;o",
-    date: 1693808051249,
-  },
-  {
-    id: 2,
-    emotion: 2,
-    content: "오늘의 일기 2번",
-    date: 1693808051250,
-  },
-  {
-    id: 3,
-    emotion: 3,
-    content: "오늘의 일기 3번",
-    date: 1693808051251,
-  },
-  {
-    id: 4,
-    emotion: 4,
-    content: "오늘의 일기 4번",
-    date: 1693808051252,
-  },
-  {
-    id: 5,
-    emotion: 5,
-    content: "오늘의 일기 5번",
-    date: 1693808051253,
-  },
-];
-
 function App() {
   useEffect(() => {
-    localStorage.setItem("item1", 10);
-    localStorage.setItem("item2", "20");
-    localStorage.setItem("item3", JSON.stringify({ value: 30 })); //직렬화
+    const item1 = localStorage.getItem("item1");
+    const item2 = localStorage.getItem("item2");
+    const item3 = JSON.parse(localStorage.getItem("item3"));
+    console.log({ item1, item2, item3 });
   }, []);
-  const [data, dispatch] = useReducer(reducer, dummyData);
+  const [data, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(6); //data의 id
   //CREATE
