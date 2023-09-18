@@ -76,7 +76,6 @@ const DiaryList = ({ diaryList }) => {
           />
         </div>
         <div className="right_col">
-          {" "}
           <MyButton
             type={"positive"}
             text={"새 일기쓰기"}

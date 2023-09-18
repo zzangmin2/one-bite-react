@@ -43,15 +43,24 @@ export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext(); //Dispatch함수 공급
 
 function App() {
-  useEffect(() => {
-    const item1 = localStorage.getItem("item1");
-    const item2 = localStorage.getItem("item2");
-    const item3 = JSON.parse(localStorage.getItem("item3"));
-    console.log({ item1, item2, item3 });
-  }, []);
   const [data, dispatch] = useReducer(reducer, []);
 
-  const dataId = useRef(6); //data의 id
+  useEffect(() => {
+    const localData = localStorage.getItem("diary");
+    if (localData) {
+      const diaryList = JSON.parse(localData).sort(
+        (a, b) => parseInt(b.id) - parseInt(a.id)
+      );
+      dataId.current = parseInt(diaryList[0].id + 1);
+
+      console.log(diaryList);
+      console.log(dataId);
+
+      dispatch({ type: "INIT", data: diaryList });
+    }
+  }, []);
+
+  const dataId = useRef(0); //data의 id
   //CREATE
   const onCreate = (date, content, emotion) => {
     dispatch({

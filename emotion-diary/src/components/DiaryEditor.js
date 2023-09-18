@@ -62,11 +62,13 @@ const DiaryEditor = (isEdit, originData) => {
 
   return (
     <div className="DiaryEditor">
+      {console.log(isEdit)}
       <MyHeader
-        headText={isEdit ? "일기 수정하기" : "새 일기쓰기"}
+        // headText={isEdit ? "일기 수정하기" : "새 일기쓰기"}
+        headText={isEdit === true ? "일기 수정하기" : "새 일기쓰기"}
         leftChild={<MyButton text={"뒤로가기"} onClick={() => navigate(-1)} />}
         rightChild={
-          isEdit && (
+          isEdit === true && (
             <MyButton
               text={"삭제하기"}
               type={"negative"}
@@ -75,7 +77,6 @@ const DiaryEditor = (isEdit, originData) => {
           )
         }
       />
-
       <div>
         <section>
           <h4>오늘은 언제인가요?</h4>
@@ -122,5 +123,9 @@ const DiaryEditor = (isEdit, originData) => {
     </div>
   );
 };
+
+// DiaryEditor.defaultProps = {
+//   isEdit: false,
+// };
 
 export default DiaryEditor;

@@ -1,6 +1,6 @@
 import DiaryEditor from "../components/DiaryEditor";
 
-const New = () => {
+const New = (isEdit) => {
   return (
     <div>
       <DiaryEditor />
