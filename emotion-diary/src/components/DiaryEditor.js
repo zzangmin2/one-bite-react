@@ -9,7 +9,7 @@ import EmotionItem from "./EmotionItem";
 import { getStringDate } from "../util/date";
 import { emotionList } from "../util/emotion";
 
-const DiaryEditor = (isEdit, originData) => {
+const DiaryEditor = ({ isEdit, originData }) => {
   const contentRef = useRef();
   const [content, setContent] = useState("");
   const [emotion, setEmotion] = useState(3);
@@ -41,7 +41,6 @@ const DiaryEditor = (isEdit, originData) => {
       }
     }
 
-    onCreate(date, content, emotion);
     navigate("/", { replace: true }); //home으로 이동하되, 다시 edit 페이지로 못 옴
   };
 
@@ -62,13 +61,12 @@ const DiaryEditor = (isEdit, originData) => {
 
   return (
     <div className="DiaryEditor">
-      {console.log(isEdit)}
       <MyHeader
         // headText={isEdit ? "일기 수정하기" : "새 일기쓰기"}
-        headText={isEdit === true ? "일기 수정하기" : "새 일기쓰기"}
+        headText={isEdit ? "일기 수정하기" : "새 일기쓰기"}
         leftChild={<MyButton text={"뒤로가기"} onClick={() => navigate(-1)} />}
         rightChild={
-          isEdit === true && (
+          isEdit && (
             <MyButton
               text={"삭제하기"}
               type={"negative"}
@@ -124,8 +122,8 @@ const DiaryEditor = (isEdit, originData) => {
   );
 };
 
-// DiaryEditor.defaultProps = {
-//   isEdit: false,
-// };
+DiaryEditor.defaultProps = {
+  isEdit: false,
+};
 
 export default DiaryEditor;

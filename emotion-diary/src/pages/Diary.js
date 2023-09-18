@@ -13,18 +13,17 @@ const Diary = () => {
   const [data, setData] = useState();
 
   const diaryList = useContext(DiaryStateContext);
-  console.log(diaryList);
 
   useEffect(() => {
     if (diaryList.length >= 1) {
       const targetDiary = diaryList.find(
         (it) => parseInt(it.id) === parseInt(id)
       );
-      console.log("타겟다이어리" + targetDiary);
 
       if (targetDiary) {
         //일기가 존재할 때
         setData(targetDiary);
+        console.log("타겟다이어리" + targetDiary);
       } else {
         //일기가 없을 떄
         alert("없는 일기입니다.");
